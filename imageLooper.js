@@ -23,7 +23,7 @@ Copyright 2012, Not So Average, Inc.
 var numberOfImages = 100;
 var folder = 'loopImages/'; //The folder where the images reside.
 var fileExtension = 'png'; //The extension of the files.
-var imagePrefix = 'image_'
+var imagePrefix = 'image_';
 var imageId = 'currentFrame'; //The Element ID of the image that is in your HTML.
 var reverseBoxId = 'reverseCheckBox'; //The Element ID of the checkbox used to determine reversing.
 var isGoing = false;
@@ -52,11 +52,11 @@ function imageStringArray() {
 var iterator = 0;
 var checkBox = document.getElementById(reverseBoxId);
 var reversing = false;
-var interval;
+var interval = null;
 
 function startLoop() {
-	if (interval === null {
-			interval = setInterval(loop, 50);
+	if (interval === null) {
+		interval = setInterval(loop, 50);
 	}
 }
 
