@@ -55,7 +55,9 @@ var reversing = false;
 var interval;
 
 function startLoop() {
-		interval = setInterval(loop, 50);
+	if (interval != null {
+			interval = setInterval(loop, 50);
+	}
 }
 
 function loop() {
@@ -87,4 +89,5 @@ function loop() {
 
 function stopLoop() {
 	clearInterval(interval);
+	interval = null;
 }
