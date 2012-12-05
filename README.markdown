@@ -17,7 +17,7 @@ All one needs to do is somewhere in their HTML have an image attribute with an I
 		window.imageId = 'currentFrame';
 		window.reverseBoxId = 'reverseCheckBox';
 		var pictureArray = imageStringArray();
-		//if you don't want to use buttons to start the loop, make sure you call the startLoop() function somewhere.
+		//if you don't want to use buttons to start the loop, make sure you call 		the startLoop() function somewhere.
 		//startLoop();
 	</script>
 
@@ -36,8 +36,8 @@ I would write this:
 		window.imageId = 'snails';
 		window.reverseBoxId = 'reverseCheckBox';
 		var pictureArray = imageStringArray();
-		//if you don't want to use buttons to start the loop, make sure you call the startLoop() function somewhere.
+		//if you don't want to use buttons to start the loop, make sure you call 		the startLoop() function somewhere.
 		//startLoop();
 	</script>
 
-If you want to start the loop, call startLoop(), if you want to stop, call stopLoop().
+If you want to start the loop, call `startLoop()`, if you want to stop, call `stopLoop()`.
