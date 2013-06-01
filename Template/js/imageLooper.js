@@ -23,30 +23,38 @@ Copyright 2012, Not So Average, Inc.
 var numberOfImages = 100;
 var folder = 'loopImages/'; //The folder where the images reside.
 var fileExtension = 'png'; //The extension of the files.
-var imagePrefix = 'image_'
-var imageId = 'currentFrame'; //The Element ID of the image that is in your HTML.
+var imagePrefix = 'image_';
+var divId = 'currentPicture'; //The Element ID of the div that is in your HTML.
 var reverseBoxId = 'reverseCheckBox'; //The Element ID of the checkbox used to determine reversing.
 var isGoing = false;
+var pictureArray;
 
-function imageStringArray() {
-	var picArray = [];
-	console.log(window.numberOfImages);
-	var i = 0;
-	for (i = 0; i <= window.numberOfImages; i++) {
-			if (i < 10) {
-				var numberString = '00' + i; //Change the 0's here based on the nuber of images you have.
-			}
-			else if (i < 100) {
-				var numberString = '0' + i;
-			}
-			else {
-				var numberString = '' + i;
-			}
-			var fileNameString = folder + imagePrefix + numberString + '.' + window.fileExtension;
-			console.log(fileNameString);
-			picArray.push(fileNameString);
-	}
-	return picArray;
+function imageTagArray() {
+    var imageArray = [];
+    var i = 1;
+    for (i = 1; i <= numberOfImages; i++) {
+        var numberString = '';        
+		if (i < 10) {
+			numberString = '00' + i; //Change the 0's here based on the nuber of images you have.
+		}
+		else if (i < 100) {
+			numberString = '0' + i;
+        }
+		else {
+			numberString = '' + i;
+		}
+        
+        var imageTag = document.createElement("IMAGE");
+		var fileNameString = folder + imagePrefix + numberString + '.' + window.fileExtension;
+        imageTag.setAttribute("style", "display:none;");
+        imageTag.setAttribute("src", fileNameString);
+        imageTag.setAttribute("onerror", "stopLoop()");
+        imageTag.setAttribute("id", i);
+        document.getElementById(divId).appendChild(imageTag);
+        
+        imageArray.push(imageTag);
+    }
+    return imageArray;
 }
 
 var iterator = 0;
@@ -62,7 +70,40 @@ function loop() {
 	if (checkBox !== null) {
 		var isReversed = checkBox.checked;
 	}
-	document.getElementById("currentFrame").src = pictureArray[iterator];
+    
+    if (pictureArray === null) {
+        pictureArray = imageTagArray();
+    }
+    
+	var lastImage = 0;
+    var currentImage = iterator;
+    
+    if (reversing) {
+        lastImage = iterator;
+        if (lastImage === numberOfImages) {
+            lastImage = numberOfImages - 1;
+        }
+        if (lastImage === 0) {
+            reversing = false;
+        }
+        else {
+            currentImage = lastImage - 1;
+        }
+    }
+    else {
+        lastImage = (iterator - 1);
+        if (lastImage === -1) {
+            lastImage = numberOfImages - 1;
+        }
+    }
+    
+    
+    var lastImageTag = pictureArray[lastImage]; //document.getElementById(lastImage);
+    lastImageTag.setAttribute("style", "display:none;");
+    
+    var imageTag = pictureArray[currentImage]; //document.getElementById(currentImage);
+    imageTag.setAttribute("style", "display:block;");
+    
 	if (reversing) {
 		if (iterator === 0) {
 			reversing = false;
@@ -82,7 +123,6 @@ function loop() {
 			}
 		}
 	}
-	console.log(pictureArray[iterator]);
 }
 
 function stopLoop() {

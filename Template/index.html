@@ -12,9 +12,9 @@
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/main.css">
-        <script src="js/vendor/modernizr-2.6.1.min.js"></script>
+        <link rel="stylesheet" href="/css/normalize.css">
+        <link rel="stylesheet" href="/css/main.css">
+
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -23,31 +23,14 @@
 
         <!-- Add your site or application content here -->
 		<div align="center">
-			<div id="currentPicture">
-				<image id="currentFrame" src="loopImages/image_000.png" onerror="stopLoop()"></image> <!--Change to your initial file -->
+			<div id="currentPicture" style="padding-top:20px;">
 			</div>
 			<div id = "buttons">
 				<input type="checkbox" id="reverseCheckBox">Reversed?</input>
-				<button onClick="startLoop()">Start</button>
-				<button onClick="stopLoop()">Stop</button>
+				<button id="toggleButton" onClick="toggleLoop(document.getElementById('toggleButton').innerHTML)">Stop</button>
 			</div>
 		</div>
 		
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
-        <script src="js/plugins.js"></script>
-        <script src="js/imageLooper.js"></script>
-		<script type = "text/javascript">
-			window.numberOfImages = 100;
-			window.folder = 'loopImages/'
-			window.imagePrefix = 'image_'
-			window.fileExtension = 'png';
-			window.imageId = 'currentFrame';
-			window.reverseBoxId = 'reverseCheckBox';
-			var pictureArray = imageStringArray();
-			//if you don't want to use buttons to start the loop, make sure you call the startLoop() function somewhere.  
-			//startLoop();
-		</script>
-
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.
 		
         <script>
@@ -58,5 +41,28 @@
 		</script>
 		
 		-->
+        <script src="/js/plugins.js"></script>
+        <script src="/js/imageLooper.js"></script>
+		<script type = "text/javascript">
+            function toggleLoop(s) {
+                if (s === 'Start') {
+                    startLoop();
+                    document.getElementById('toggleButton').innerHTML = 'Stop';
+                }
+                else if (s === 'Stop') {
+                    stopLoop();
+                    document.getElementById('toggleButton').innerHTML = 'Start';
+                }
+            }
+        </script>
+		<script type = "text/javascript">
+			window.numberOfImages = 53;
+			window.folder = 'loopImages/'
+			window.imagePrefix = 'image_'
+			window.fileExtension = 'png';
+			window.reverseBoxId = 'reverseCheckBox';
+            window.divId = 'currentPicture';
+			startLoop();
+		</script>
     </body>
 </html>

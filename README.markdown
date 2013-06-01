@@ -14,9 +14,9 @@ All one needs to do is somewhere in their HTML have an image attribute with an I
 		window.folder = 'loopImages/'
 		window.imagePrefix = 'image_'
 		window.fileExtension = 'png';
-		window.imageId = 'currentFrame';
+		window.divId = 'currentPicture';
 		window.reverseBoxId = 'reverseCheckBox';
-		var pictureArray = imageStringArray();
+		var pictureArray = imageTagArray();
 		//if you don't want to use buttons to start the loop, make sure you call 		the startLoop() function somewhere.
 		//startLoop();
 	</script>
@@ -33,7 +33,7 @@ I would write this:
 		window.folder = 'pancakes/'
 		window.imagePrefix = 'dog_'
 		window.fileExtension = 'jpg';
-		window.imageId = 'snails';
+		window.divId = 'snails';
 		window.reverseBoxId = 'reverseCheckBox';
 		var pictureArray = imageStringArray();
 		//if you don't want to use buttons to start the loop, make sure you call 		the startLoop() function somewhere.
