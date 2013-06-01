@@ -41,8 +41,8 @@
 		</script>
 		
 		-->
-        <script src="/js/plugins.js"></script>
-        <script src="/js/imageLooper.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/imageLooper.js"></script>
 		<script type = "text/javascript">
             function toggleLoop(s) {
                 if (s === 'Start') {
@@ -56,13 +56,8 @@
             }
         </script>
 		<script type = "text/javascript">
-			window.numberOfImages = 53;
-			window.folder = 'loopImages/'
-			window.imagePrefix = 'image_'
-			window.fileExtension = 'png';
-			window.reverseBoxId = 'reverseCheckBox';
-            window.divId = 'currentPicture';
-			startLoop();
+            var looperOptions = {"numberOfImages" : "53", "folder" : "loopImages", "fileExtension" : "png", "imagePrefix" : "image_", "divId" : "currentPicture", "reverseBoxId" : "reverseCheckBox", "autoStart" : true};
+            imageLooper(looperOptions);
 		</script>
     </body>
 </html>

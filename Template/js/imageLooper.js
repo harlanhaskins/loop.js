@@ -19,118 +19,131 @@ Copyright 2012, Not So Average, Inc.
 	
 	You must set the parameters in your HTML!
 */
+var defaultOptions = {"numberOfImages" : "54", "folder" : "loopImages", "fileExtension" : "png", "imagePrefix" : "image_", "divId" : "currentPicture", "reverseBoxId" : "reverseCheckBox", "autoStart" : true};
 
-var numberOfImages = 100;
-var folder = 'loopImages/'; //The folder where the images reside.
-var fileExtension = 'png'; //The extension of the files.
-var imagePrefix = 'image_';
-var divId = 'currentPicture'; //The Element ID of the div that is in your HTML.
-var reverseBoxId = 'reverseCheckBox'; //The Element ID of the checkbox used to determine reversing.
-var isGoing = false;
-var imageArray;
+var imageLooper = function (options) {
+    var imageArray;
+    options = options || defaultOptions;
+    function imageTagArray() {
+        if (!imageArray) {
+            imageArray = [];
+            var i;
+            for (i = 0; i < options.numberOfImages; i += 1) {
+                var numberString = '';        
+                if (i < 10) {
+                    numberString = '00' + i; //Change the 0's here based on the nuber of images you have.
+                }
+                else if (i < 100) {
+                    numberString = '0' + i;
+                }
+                    else {
+                        numberString = '' + i;
+                    }
+                imageArray.push(makeAndAddImageTagToDocument(numberString, i));
+            }
+        }
+        return imageArray;
+    }
 
-function imageTagArray() {
-    if (!imageArray) {
-        imageArray = [];
-        var i;
-        for (i = 1; i <= numberOfImages; i += 1) {
-          var numberString = '';        
-		  if (i < 10) {
-                numberString = '00' + i; //Change the 0's here based on the nuber of images you have.
-		  }
-		  else if (i < 100) {
-                numberString = '0' + i;
-            }
-		  else {
-                numberString = '' + i;
-            }
+    var iterator = 0;
+    var checkBox = document.getElementById(options.reverseBoxId);
+    var reversing = false;
+    var interval;
+
+    function startLoop() {
+            interval = setInterval(loop, 50);
+    }
+    
+    function setTagAttributes(tag, numberString, i) {
+        var fileNameString = options.folder + "/" + options.imagePrefix + numberString + '.' + options.fileExtension;
+        tag.style.display = "none";
+        tag.setAttribute("src", fileNameString);
+        tag.setAttribute("onerror", "imageLooper.stopLoop()");
+        tag.setAttribute("id", i);
+    }
+    
+    function makeAndAddImageTagToDocument(numberString, i) {
+        var imageTag = document.createElement("IMAGE");
+        setTagAttributes(imageTag, numberString, i);
+        document.getElementById(options.divId).appendChild(imageTag);
+        return imageTag;
+    }
+    
+    function currentTagNumbers() {
         
-            var imageTag = document.createElement("IMAGE");
-            var fileNameString = folder + imagePrefix + numberString + '.' + window.fileExtension;
-            imageTag.style.display = "none";
-            imageTag.setAttribute("src", fileNameString);
-            imageTag.setAttribute("onerror", "stopLoop()");
-            imageTag.setAttribute("id", i);
-            document.getElementById(divId).appendChild(imageTag);
-                
-            imageArray.push(imageTag);
-        }
-    }
-    return imageArray;
-}
-
-function pictureArray() {
-    var picArray;
-    if (picArray === null) {
-        picArray = imageTagArray();
-    }
-    return picArray
-}
-
-var iterator = 0;
-var checkBox = document.getElementById(reverseBoxId);
-var reversing = false;
-var interval;
-
-function startLoop() {
-		interval = setInterval(loop, 50);
-}
-
-function loop() {
-	if (checkBox !== null) {
-		var isReversed = checkBox.checked;
-	}
-    
-	var lastImage = 0;
-    var currentImage = iterator;
-    
-    if (reversing) {
-        lastImage = iterator;
-        if (lastImage === numberOfImages) {
-            lastImage = numberOfImages - 1;
-        }
-        if (lastImage === 0) {
-            reversing = false;
+        var lastImage = 0;
+        var currentImage = iterator;
+        var numberArray = [];
+        if (reversing) {
+            lastImage = iterator;
+            if (lastImage === options.numberOfImages) {
+                lastImage = options.numberOfImages - 1;
+            }
+            if (lastImage === 0) {
+                reversing = false;
+            }
+            else {
+                currentImage = lastImage - 1;
+            }
         }
         else {
-            currentImage = lastImage - 1;
+            lastImage = (iterator - 1);
+            if (lastImage === -1) {
+                lastImage = options.numberOfImages - 1;
+            }
         }
+        numberArray.push(lastImage);
+        numberArray.push(currentImage);
+        return numberArray;
     }
-    else {
-        lastImage = (iterator - 1);
-        if (lastImage === -1) {
-            lastImage = numberOfImages - 1;
+    
+    function loop() {
+        if (checkBox !== null) {
+            var isReversed = checkBox.checked;
         }
+    
+        var picArray = imageTagArray();
+        var numbers = currentTagNumbers();
+        
+        var lastImageTag = picArray[numbers[0]]; //document.getElementById(lastImage);
+        if (lastImageTag) {
+            lastImageTag.style.display = "none";
+        }
+    
+        var imageTag = picArray[numbers[1]]; //document.getElementById(currentImage);
+        if (imageTag) {
+            imageTag.style.display = "block";
+        }
+    
+	   if (reversing) {
+           if (iterator <= 0) {
+               reversing = false;
+           }
+           else {
+               iterator -= 1;
+           }
+	   }
+	   else {
+           iterator += 1;
+           if (iterator >= options.numberOfImages) {
+               if (isReversed) {
+                   reversing = true;
+               }
+               else {
+                   iterator = 0;
+               }
+           }
+	   }
     }
-    var picArray = imageTagArray();
-    
-    var lastImageTag = picArray[lastImage]; //document.getElementById(lastImage);
-    lastImageTag.style.display = "none";
-    
-    var imageTag = picArray[currentImage]; //document.getElementById(currentImage);
-    imageTag.style.display = "block";
-    
-	if (reversing) {
-		if (iterator === 0) {
-			reversing = false;
-		}
-		else {
-			iterator -= 1;
-		}
-	}
-	else {
-		iterator += 1;
-		if (iterator === numberOfImages) {
-			if (isReversed) {
-				reversing = true;
-			}
-			else {
-				iterator = 0;
-			}
-		}
-	}
-}
 
-function stopLoop() {
-	clearInterval(interval);
-}
+    function stopLoop() {
+        clearInterval(interval);
+    }
+    
+    if (options.autoStart) {
+        startLoop();
+    }
+    
+};
+
+//imageLooper(options);
