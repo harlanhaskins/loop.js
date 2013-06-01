@@ -27,34 +27,44 @@ var imagePrefix = 'image_';
 var divId = 'currentPicture'; //The Element ID of the div that is in your HTML.
 var reverseBoxId = 'reverseCheckBox'; //The Element ID of the checkbox used to determine reversing.
 var isGoing = false;
-var pictureArray;
+var imageArray;
 
 function imageTagArray() {
-    var imageArray = [];
-    var i = 1;
-    for (i = 1; i <= numberOfImages; i++) {
-        var numberString = '';        
-		if (i < 10) {
-			numberString = '00' + i; //Change the 0's here based on the nuber of images you have.
-		}
-		else if (i < 100) {
-			numberString = '0' + i;
+    if (!imageArray) {
+        imageArray = [];
+        var i;
+        for (i = 1; i <= numberOfImages; i += 1) {
+          var numberString = '';        
+		  if (i < 10) {
+                numberString = '00' + i; //Change the 0's here based on the nuber of images you have.
+		  }
+		  else if (i < 100) {
+                numberString = '0' + i;
+            }
+		  else {
+                numberString = '' + i;
+            }
+        
+            var imageTag = document.createElement("IMAGE");
+            var fileNameString = folder + imagePrefix + numberString + '.' + window.fileExtension;
+            imageTag.style.display = "none";
+            imageTag.setAttribute("src", fileNameString);
+            imageTag.setAttribute("onerror", "stopLoop()");
+            imageTag.setAttribute("id", i);
+            document.getElementById(divId).appendChild(imageTag);
+                
+            imageArray.push(imageTag);
         }
-		else {
-			numberString = '' + i;
-		}
-        
-        var imageTag = document.createElement("IMAGE");
-		var fileNameString = folder + imagePrefix + numberString + '.' + window.fileExtension;
-        imageTag.setAttribute("style", "display:none;");
-        imageTag.setAttribute("src", fileNameString);
-        imageTag.setAttribute("onerror", "stopLoop()");
-        imageTag.setAttribute("id", i);
-        document.getElementById(divId).appendChild(imageTag);
-        
-        imageArray.push(imageTag);
     }
     return imageArray;
+}
+
+function pictureArray() {
+    var picArray;
+    if (picArray === null) {
+        picArray = imageTagArray();
+    }
+    return picArray
 }
 
 var iterator = 0;
@@ -70,10 +80,6 @@ function loop() {
 	if (checkBox !== null) {
 		var isReversed = checkBox.checked;
 	}
-    
-    if (pictureArray === null) {
-        pictureArray = imageTagArray();
-    }
     
 	var lastImage = 0;
     var currentImage = iterator;
@@ -96,13 +102,13 @@ function loop() {
             lastImage = numberOfImages - 1;
         }
     }
+    var picArray = imageTagArray();
     
+    var lastImageTag = picArray[lastImage]; //document.getElementById(lastImage);
+    lastImageTag.style.display = "none";
     
-    var lastImageTag = pictureArray[lastImage]; //document.getElementById(lastImage);
-    lastImageTag.setAttribute("style", "display:none;");
-    
-    var imageTag = pictureArray[currentImage]; //document.getElementById(currentImage);
-    imageTag.setAttribute("style", "display:block;");
+    var imageTag = picArray[currentImage]; //document.getElementById(currentImage);
+    imageTag.style.display = "block";
     
 	if (reversing) {
 		if (iterator === 0) {
