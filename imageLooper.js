@@ -27,22 +27,25 @@ var imageLooper = function (options) {
     function imageTagArray() {
         if (!imageArray) {
             imageArray = [];
-            var i;
-            for (i = 0; i < options.numberOfImages; i += 1) {
-                var numberString = '';        
-                if (i < 10) {
-                    numberString = '00' + i; //Change the 0's here based on the nuber of images you have.
-                }
-                else if (i < 100) {
-                    numberString = '0' + i;
-                }
-                    else {
-                        numberString = '' + i;
-                    }
-                imageArray.push(makeAndAddImageTagToDocument(numberString, i));
+            for (var i = 0; i < options.numberOfImages; i += 1) {
+                imageArray.push(makeAndAddImageTagToDocument(numberString(i)));
             }
         }
         return imageArray;
+    }
+    
+    function numberString(i) {
+        var number = '';        
+        if (i < 10) {
+            number = '00' + i; //Change the 0's here based on the nuber of images you have.
+        }
+        else if (i < 100) {
+            number = '0' + i;
+        }
+        else {
+            number = '' + i;
+        }
+        return number;
     }
 
     var iterator = 0;
@@ -54,23 +57,21 @@ var imageLooper = function (options) {
             interval = setInterval(loop, 50);
     }
     
-    function setTagAttributes(tag, numberString, i) {
+    function setTagAttributes(tag, numberString) {
         var fileNameString = options.folder + "/" + options.imagePrefix + numberString + '.' + options.fileExtension;
         tag.style.display = "none";
         tag.setAttribute("src", fileNameString);
         tag.setAttribute("onerror", "imageLooper.stopLoop()");
-        tag.setAttribute("id", i);
     }
     
-    function makeAndAddImageTagToDocument(numberString, i) {
+    function makeAndAddImageTagToDocument(numberString) {
         var imageTag = document.createElement("IMAGE");
-        setTagAttributes(imageTag, numberString, i);
+        setTagAttributes(imageTag, numberString);
         document.getElementById(options.divId).appendChild(imageTag);
         return imageTag;
     }
     
     function currentTagNumbers() {
-        
         var lastImage = 0;
         var currentImage = iterator;
         var numberArray = [];
@@ -92,16 +93,14 @@ var imageLooper = function (options) {
                 lastImage = options.numberOfImages - 1;
             }
         }
+        
         numberArray.push(lastImage);
         numberArray.push(currentImage);
+        
         return numberArray;
     }
     
     function loop() {
-        if (checkBox !== null) {
-            var isReversed = checkBox.checked;
-        }
-    
         var picArray = imageTagArray();
         var numbers = currentTagNumbers();
         
@@ -115,13 +114,21 @@ var imageLooper = function (options) {
             imageTag.style.display = "block";
         }
     
-	   if (reversing) {
-           if (iterator <= 0) {
-               reversing = false;
-           }
-           else {
-               iterator -= 1;
-           }
+	   adjustIterator();
+    }
+    
+    function adjustIterator() {
+        if (checkBox !== null) {
+            var isReversed = checkBox.checked;
+        }
+        
+        if (reversing) {
+            if (iterator <= 0) {
+                reversing = false;
+            }
+            else {
+                iterator -= 1;
+            }
 	   }
 	   else {
            iterator += 1;
