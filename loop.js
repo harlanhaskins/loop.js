@@ -18,7 +18,33 @@ Copyright 2013, Not So Average, Inc.
 	You must have a folder filled with your images, named sequentially with a 3 digit number, starting with 000.
 	
 */
-/*jslint white: false */
+
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+
+// requestAnimationFrame polyfill by Erik Möller
+// fixes from Paul Irish and Tino Zijdel
+(function () {
+    var vendors = ['webkit', 'moz'];
+    for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
+        var vp = vendors[i];
+        window.requestAnimationFrame = window[vp + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = (window[vp + 'CancelAnimationFrame'] || window[vp + 'CancelRequestAnimationFrame']);
+    }
+    if (!window.requestAnimationFrame || !window.cancelAnimationFrame) {
+        var lastTime = 0;
+        window.requestAnimationFrame = function (callback) {
+            var now = new Date().getTime();
+            var nextTime = Math.max(lastTime + 16, now);
+            return setTimeout(function () {
+                callback(lastTime = nextTime);
+            },
+                nextTime - now);
+        };
+        window.cancelAnimationFrame = clearTimeout;
+    }
+}());
+
 var imageLooper = function (options) {
 
     function getMergedOptions(options) {
@@ -49,27 +75,6 @@ var imageLooper = function (options) {
     }
 
     options = getMergedOptions(options);
-
-    (function () {
-        var vendors = ['webkit', 'moz'];
-        for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
-            var vp = vendors[i];
-            window.requestAnimationFrame = window[vp + 'RequestAnimationFrame'];
-            window.cancelAnimationFrame = (window[vp + 'CancelAnimationFrame'] || window[vp + 'CancelRequestAnimationFrame']);
-        }
-        if (!window.requestAnimationFrame || !window.cancelAnimationFrame) {
-            var lastTime = 0;
-            window.requestAnimationFrame = function (callback) {
-                var now = new Date().getTime();
-                var nextTime = Math.max(lastTime + 16, now);
-                return setTimeout(function () {
-                    callback(lastTime = nextTime);
-                },
-                    nextTime - now);
-            };
-            window.cancelAnimationFrame = clearTimeout;
-        }
-    }());
 
     var loadedImages = 0;
 
