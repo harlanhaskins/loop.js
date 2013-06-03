@@ -29,7 +29,6 @@ I would write this:
                                   "imagePrefix" : "dog_",
                                   "div" : "snails" };
                 var looper = imageLooper(looperOptions);
-		//if you don't want to use buttons to start the loop, and you've disabled autoStart, 'make sure you call looper.startLoop() somewhere.
-	</script>
+		//if you don't want to use buttons to start the loop, and you've disabled autoStart, 'make sure you call looper.startLoop() somewhere.	</script>
 
 If you want to start the loop, call `imageLooper.startLoop()`, if you want to stop, call `imageLooper.stopLoop()`.
