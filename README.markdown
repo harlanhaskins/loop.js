@@ -18,7 +18,7 @@ All one needs to do is somewhere in their HTML have a div with an ID and instant
         
 You can change as many or as few of the options as you'd like. If you use the default options, then loop.js requires only one line:
         
-        `var looper = imageLooper();`
+        var looper = imageLooper();
 
 For example, if I have a sequence with 217 images, each named `dog_###.jpg`, in the folder `pancakes/`, and I want the images looped in a div with the id `snails`.
 
