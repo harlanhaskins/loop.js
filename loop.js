@@ -32,22 +32,25 @@ var imageLooper = (function (options) {
                               "div" : "currentPicture",
                               "reversed" : false,
                               "autoStart" : true};
-        var key;
-        for (key in options) {
-            if (!options.hasOwnProperty(key)) {
-                continue;
-            }
-            if (key === 'div') {
-                defaultOptions[key] = document.getElementById(defaultOptions[key]);
-            }
-            else {
-                defaultOptions[key] = options[key];
+        if (options) {
+            var key;
+            for (key in options) {
+                if (!options.hasOwnProperty(key)) {
+                    continue;
+                }
+                if (key === 'div') {
+                    defaultOptions[key] = document.getElementById(defaultOptions[key]);
+                }
+                else {
+                    defaultOptions[key] = options[key];
+                }
             }
         }
         return defaultOptions;
     }
     
     options = getMergedOptions(options);
+    
     var loadedImages = 0;
     function addToLoadedImages() {
         loadedImages += 1;
