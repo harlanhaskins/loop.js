@@ -16,7 +16,8 @@ All one needs to do is somewhere in their HTML have a div with an ID and instant
         "reversed" : false,
         "autoStart" : true
         
-You can change as many or as few of the options as you'd like.
+You can change as many or as few of the options as you'd like. If you use the default options, then loop.js requires only one line:
+        var looper = imageLooper();
 
 For example, if I have a sequence with 217 images, each named `dog_###.jpg`, in the folder `pancakes/`, and I want the images looped in a div with the id `snails`.
 
@@ -29,6 +30,6 @@ I would write this:
                                   "imagePrefix" : "dog_",
                                   "div" : "snails" };
                 var looper = imageLooper(looperOptions);
-		//if you don't want to use buttons to start the loop, and you've disabled autoStart, 'make sure you call looper.startLoop() somewhere.	</script>
+		//if you don't want to use buttons to start the loop, and you've disabled autoStart, make sure you call looper.startLoop() somewhere.	</script>
 
-If you want to start the loop, call `imageLooper.startLoop()`, if you want to stop, call `imageLooper.stopLoop()`.
+If you want to start the loop, call `looper.startLoop()`, if you want to stop, call `looper.stopLoop()`.
