@@ -22,8 +22,8 @@
 			<div id="currentPicture" style="padding:20px;">
 			</div>
 			<div id = "buttons">
-				<input type="checkbox" id="reverseCheckBox" onClick="setReversed()">Reversed
-				<button id="toggleButton" onClick="toggleLoop(document.getElementById('toggleButton').innerHTML)">Stop</button>
+				<input type="checkbox" id="reverseCheckBox" onClick="looper.setReversed(this.checked)">Reversed
+				<button id="toggleButton" onClick="toggleLoop(this.innerHTML)">Stop</button>
 			</div>
 		</div>
 		

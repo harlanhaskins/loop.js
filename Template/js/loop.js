@@ -19,44 +19,73 @@ Copyright 2013, Not So Average, Inc.
 	
 */
 
-/*jslint white: false */
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 
-var imageLooper = (function (options) {
-    
+// requestAnimationFrame polyfill by Erik Möller
+// fixes from Paul Irish and Tino Zijdel
+(function () {
+    var vendors = ['webkit', 'moz'];
+    for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
+        var vp = vendors[i];
+        window.requestAnimationFrame = window[vp + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = (window[vp + 'CancelAnimationFrame'] || window[vp + 'CancelRequestAnimationFrame']);
+    }
+    if (!window.requestAnimationFrame || !window.cancelAnimationFrame) {
+        var lastTime = 0;
+        window.requestAnimationFrame = function (callback) {
+            var now = new Date().getTime();
+            var nextTime = Math.max(lastTime + 16, now);
+            return setTimeout(function () {
+                callback(lastTime = nextTime);
+            },
+                nextTime - now);
+        };
+        window.cancelAnimationFrame = clearTimeout;
+    }
+}());
+
+var imageLooper = function (options) {
+
     function getMergedOptions(options) {
-        var defaultOptions = {"numberOfImages" : 54,
-                              "framesPerSecond" : 24,
-                              "folder" : "loopImages",
-                              "fileExtension" : "png",
-                              "imagePrefix" : "image_",
-                              "div" : "currentPicture",
-                              "reversed" : false,
-                              "autoStart" : true};
-        var key;
-        for (key in options) {
-            if (!options.hasOwnProperty(key)) {
-                continue;
-            }
-            if (key === 'div') {
-                defaultOptions[key] = document.getElementById(defaultOptions[key]);
-            }
-            else {
-                defaultOptions[key] = options[key];
+        var defaultOptions = {
+            "numberOfImages": 54,
+            "framesPerSecond": 24,
+            "folder": "loopImages",
+            "fileExtension": "png",
+            "imagePrefix": "image_",
+            "div": "currentPicture",
+            "reversed": false,
+            "autoStart": true
+        };
+        if (options) {
+            var key;
+            for (key in options) {
+                if (!options.hasOwnProperty(key)) {
+                    continue;
+                }
+                if (key === 'div') {
+                    defaultOptions[key] = document.getElementById(defaultOptions[key]);
+                } else {
+                    defaultOptions[key] = options[key];
+                }
             }
         }
         return defaultOptions;
     }
-    
+
     options = getMergedOptions(options);
+
     var loadedImages = 0;
+
     function addToLoadedImages() {
         loadedImages += 1;
     }
-    
+
     function allImagesLoaded() {
         return (loadedImages >= options.numberOfImages);
     }
-    
+
     function setTagAttributes(tag, numberString) {
         var fileNameString = options.folder + "/" + options.imagePrefix + numberString + '.' + options.fileExtension;
         tag.style.display = "none";
@@ -64,18 +93,18 @@ var imageLooper = (function (options) {
         tag.addEventListener("error", stopLoop, false);
         tag.addEventListener("load", addToLoadedImages, false);
     }
-    
+
     function makeAndAddImageTagToDocument(numberString) {
         var imageTag = document.createElement("IMAGE");
         setTagAttributes(imageTag, numberString);
         options.div.appendChild(imageTag);
         return imageTag;
     }
-    
+
     function numberString(i) {
         return ("00" + i).slice(-3);
     }
-    
+
     function addImageTagsToDiv() {
         var i = 0;
         while (i < options.numberOfImages) {
@@ -83,7 +112,7 @@ var imageLooper = (function (options) {
             i++;
         }
     }
-    
+
     function currentTagNumbers() {
         var lastImage = 0;
         var currentImage = iterator;
@@ -95,49 +124,45 @@ var imageLooper = (function (options) {
             }
             if (lastImage === 0) {
                 reversing = false;
-            }
-            else {
+            } else {
                 currentImage = lastImage - 1;
             }
-        }
-        else {
+        } else {
             lastImage = (iterator - 1);
             if (lastImage === -1) {
                 lastImage = options.numberOfImages - 1;
             }
         }
-        
+
         numberArray.push(lastImage);
         numberArray.push(currentImage);
-        
+
         return numberArray;
     }
-    
+
     var iterator = 0;
     var reversing = false;
     var interval;
+
     function adjustIterator() {
         if (reversing) {
             if (iterator <= 0) {
                 reversing = false;
-            }
-            else {
+            } else {
                 iterator -= 1;
             }
-	   }
-	   else {
-           iterator += 1;
-           if (iterator >= options.numberOfImages) {
-               if (options.reversed) {
-                   reversing = true;
-               }
-               else {
-                   iterator = 0;
-               }
-           }
-	   }
+        } else {
+            iterator += 1;
+            if (iterator >= options.numberOfImages) {
+                if (options.reversed) {
+                    reversing = true;
+                } else {
+                    iterator = 0;
+                }
+            }
+        }
     }
-    
+
     function setPositionInLoop() {
         var picArray = options.div.children;
         var numbers = currentTagNumbers();
@@ -145,43 +170,54 @@ var imageLooper = (function (options) {
         if (lastImageTag) {
             lastImageTag.style.display = "none";
         }
-    
+
         var imageTag = picArray[numbers[1]];
         if (imageTag) {
             imageTag.style.display = "block";
         }
-        
+
         adjustIterator();
     }
     
+    var timeout;
+
     function loop() {
-        if (allImagesLoaded()) {
-            setPositionInLoop();
-        }
+        timeout = setTimeout(function () {
+            window.requestAnimationFrame(loop);
+            if (allImagesLoaded()) {
+                setPositionInLoop();
+            }
+        }, 1000 / options.framesPerSecond);
     }
-    
+
     function startLoop() {
-        interval = setInterval(loop, (1000 / options.framesPerSecond));
+        loop();
     }
-    
+
     function setReversed(reversed) {
-            options.reversed = reversed;
-        }
-    
+        options.reversed = reversed;
+    }
+
     function stopLoop() {
-        clearInterval(interval);
+        clearTimeout(timeout);
     }
 
     if (options.autoStart) {
         startLoop();
     }
-    
+
     addImageTagsToDiv();
-    
+
     return {
-        startLoop : function () { return startLoop(); },
-        stopLoop : function () { return stopLoop(); },
-        setReversed : function (reversed) { return setReversed(reversed); }
+        startLoop: function () {
+            return startLoop();
+        },
+        stopLoop: function () {
+            return stopLoop();
+        },
+        setReversed: function (reversed) {
+            return setReversed(reversed);
+        }
     };
-    
-});
+
+};

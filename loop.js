@@ -178,9 +178,11 @@ var imageLooper = function (options) {
 
         adjustIterator();
     }
+    
+    var timeout;
 
     function loop() {
-        setTimeout(function () {
+        timeout = setTimeout(function () {
             window.requestAnimationFrame(loop);
             if (allImagesLoaded()) {
                 setPositionInLoop();
@@ -197,8 +199,7 @@ var imageLooper = function (options) {
     }
 
     function stopLoop() {
-        window.cancelAnimationFrame(loop);
-
+        clearTimeout(timeout);
     }
 
     if (options.autoStart) {
