@@ -19,7 +19,8 @@
 
         <!-- Add your site or application content here -->
 		<div align="center">
-			<div id="currentPicture" style="padding:20px;">
+			<div style="padding:20px;">
+                <img id='currentPicture'>
 			</div>
 			<div id = "buttons">
 				<input type="checkbox" id="reverseCheckBox" onClick="looper.setReversed(this.checked)">Reversed
@@ -44,17 +45,19 @@
             var looperOptions = { "numberOfImages" : 53,
                                   "fileExtension" : "png",
                                   "imagePrefix" : "image_",
-                                  "div" : "currentPicture",
+                                  "img" : "currentPicture",
                                   "reversed" : false,
                                   "autoStart" : true };
             var looper = imageLooper(looperOptions);
 		</script>
         
 		<script type = "text/javascript">
+            
             function setReversed() {
                 var reversed = document.getElementById('reverseCheckBox').checked;
                 looper.setReversed(reversed);
             }
+            
             function toggleLoop(s) {
                 if (s === 'Start') {
                     looper.startLoop();

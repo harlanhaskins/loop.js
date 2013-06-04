@@ -19,6 +19,8 @@ Copyright 2013, Not So Average, Inc.
 	
 */
 
+/*jshint browser:true */
+
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 
@@ -54,7 +56,7 @@ var imageLooper = function (options) {
             "folder": "loopImages",
             "fileExtension": "png",
             "imagePrefix": "image_",
-            "div": "currentPicture",
+            "img": "currentPicture",
             "reversed": false,
             "autoStart": true
         };
@@ -64,7 +66,7 @@ var imageLooper = function (options) {
                 if (!options.hasOwnProperty(key)) {
                     continue;
                 }
-                if (key === 'div') {
+                if (key === 'img') {
                     defaultOptions[key] = document.getElementById(defaultOptions[key]);
                 } else {
                     defaultOptions[key] = options[key];
@@ -73,6 +75,8 @@ var imageLooper = function (options) {
         }
         return defaultOptions;
     }
+
+    var imageArray = [];
 
     options = getMergedOptions(options);
 
@@ -86,19 +90,19 @@ var imageLooper = function (options) {
         return (loadedImages >= options.numberOfImages);
     }
 
-    function setTagAttributes(tag, numberString) {
+    function setImageAttributes(image, numberString) {
         var fileNameString = options.folder + "/" + options.imagePrefix + numberString + '.' + options.fileExtension;
-        tag.style.display = "none";
-        tag.setAttribute("src", fileNameString);
-        tag.addEventListener("error", stopLoop, false);
-        tag.addEventListener("load", addToLoadedImages, false);
+        image.src = fileNameString;
+        image.setAttribute("src", fileNameString);
+        image.addEventListener("error", stopLoop, false);
+        image.addEventListener("load", addToLoadedImages, false);
     }
 
-    function makeAndAddImageTagToDocument(numberString) {
-        var imageTag = document.createElement("IMAGE");
-        setTagAttributes(imageTag, numberString);
-        options.div.appendChild(imageTag);
-        return imageTag;
+    function makeAndAddImageToArray(numberString) {
+        var image = new Image();
+        setImageAttributes(image, numberString);
+        imageArray.push(image);
+        return image;
     }
 
     function numberString(i) {
@@ -108,41 +112,13 @@ var imageLooper = function (options) {
     function addImageTagsToDiv() {
         var i = 0;
         while (i < options.numberOfImages) {
-            makeAndAddImageTagToDocument(numberString(i));
+            makeAndAddImageToArray(numberString(i));
             i++;
         }
     }
 
-    function currentTagNumbers() {
-        var lastImage = 0;
-        var currentImage = iterator;
-        var numberArray = [];
-        if (reversing) {
-            lastImage = iterator;
-            if (lastImage === options.numberOfImages) {
-                lastImage = options.numberOfImages - 1;
-            }
-            if (lastImage === 0) {
-                reversing = false;
-            } else {
-                currentImage = lastImage - 1;
-            }
-        } else {
-            lastImage = (iterator - 1);
-            if (lastImage === -1) {
-                lastImage = options.numberOfImages - 1;
-            }
-        }
-
-        numberArray.push(lastImage);
-        numberArray.push(currentImage);
-
-        return numberArray;
-    }
-
     var iterator = 0;
     var reversing = false;
-    var interval;
 
     function adjustIterator() {
         if (reversing) {
@@ -164,30 +140,32 @@ var imageLooper = function (options) {
     }
 
     function setPositionInLoop() {
-        var picArray = options.div.children;
-        var numbers = currentTagNumbers();
-        var lastImageTag = picArray[numbers[0]];
-        if (lastImageTag) {
-            lastImageTag.style.display = "none";
-        }
-
-        var imageTag = picArray[numbers[1]];
-        if (imageTag) {
-            imageTag.style.display = "block";
+        var image = imageArray[iterator];
+        if (image) {
+            options.img.src = image.src;
         }
 
         adjustIterator();
     }
-    
-    var timeout;
+
+
+    /* Frame Rate adjustments thanks to Rishabh at http://codetheory.in/controlling-the-frame-rate-with-requestanimationframe/ */
+    var now;
+    var then = Date.now();
+    var interval = 1000 / options.framesPerSecond;
+    var delta;
+    var request;
 
     function loop() {
-        timeout = setTimeout(function () {
-            window.requestAnimationFrame(loop);
-            if (allImagesLoaded()) {
+        request = window.requestAnimationFrame(loop);
+        if (allImagesLoaded()) {
+            now = Date.now();
+            delta = now - then;
+            if (delta > interval) {
+                then = now - (delta % interval);
                 setPositionInLoop();
             }
-        }, 1000 / options.framesPerSecond);
+        }
     }
 
     function startLoop() {
@@ -199,7 +177,7 @@ var imageLooper = function (options) {
     }
 
     function stopLoop() {
-        clearTimeout(timeout);
+        window.cancelAnimationFrame(request);
     }
 
     if (options.autoStart) {
@@ -220,4 +198,4 @@ var imageLooper = function (options) {
         }
     };
 
-};
+};*/
