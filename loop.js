@@ -51,7 +51,7 @@ var imageLooper = function (options) {
 
     function getMergedOptions(options) {
         var defaultOptions = {
-            "numberOfImages": 54,
+            "numberOfImages": 100,
             "framesPerSecond": 24,
             "folder": "loopImages",
             "fileExtension": "png",

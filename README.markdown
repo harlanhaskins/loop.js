@@ -9,7 +9,7 @@ Installation
 ===
 All one needs to do is somewhere in their HTML have an img with an ID and instantiate an `imageLooper()` object with a JSON object filled with their options. The default options are these:
 
-        "numberOfImages" : 54,
+        "numberOfImages" : 100,
         "framesPerSecond" : 24,
         "folder" : "loopImages",
         "fileExtension" : "png",
