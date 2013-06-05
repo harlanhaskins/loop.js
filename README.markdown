@@ -28,7 +28,9 @@ You can change as many or as few of the options as you'd like. If you use the de
         
         var looper = imageLooper();
 
-For example, if I have a sequence with 217 images, each named `dog-###.jpg`, in the folder `pancakes/`, and I want the images looped in an img with the id `snails`.
+Example
+===
+If I have a sequence with 217 images, each named `dog-###.jpg`, in the folder `pancakes/`, and I want the images looped in an img with the id `snails`.
 
 I would write this:
 
