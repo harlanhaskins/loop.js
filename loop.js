@@ -204,6 +204,7 @@ var imageLooper = function (options) {
     
     function setFramesPerSecond(framesPerSecond) {
         options.framesPerSecond = framesPerSecond;
+        interval = 1000 / options.framesPerSecond;
     }
 
     function stopLoop() {

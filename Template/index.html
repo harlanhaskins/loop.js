@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>loop.js</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
-
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-        <link rel="stylesheet" href="/css/normalize.css">
-        <link rel="stylesheet" href="/css/main.css">
-
-    </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="chromeframe"> You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-        <![endif]-->
-
-        <!-- Add your site or application content here -->
-		<div align="center">
-			<div style="padding:20px;">
-                <img id='currentPicture'>
-			</div>
-			<div id = "buttons">
-				<input type="checkbox" id="reverseCheckBox" onClick="looper.setReversed(this.checked)">Reversed
-				<button id="toggleButton" onClick="toggleLoop(this.innerHTML)">Stop</button>
-			</div>
-		</div>
-		
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.
-		
-        <script>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>loop.js</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <!--[if lt IE 7]>
+        <p class="chromeframe">You are using an outdated browser.
+            <a href="http://browsehappy.com/">Upgrade your browser today</a>or
+            <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a>to better experience this site.</p>
+    <![endif]-->
+    <!-- Add your site or application content here -->
+    <div align="center">
+        <div style="padding:20px;">
+            <img id='currentPicture'>
+        </div>
+        <div id="buttons">
+            <input type="checkbox" id="reverseCheckBox" onClick="looper.setReversed(this.checked)">Reversed
+            <button id="toggleButton" onClick="toggleLoop(this.innerHTML)">Stop</button>
+            <br />
+            <br />Frame Rate:
+            <input type='text' id='frameRateTextBox' style="width:30px;">
+            <button id="setFramerateButton" onClick="setFramerate(window.eval(document.getElementById('frameRateTextBox')).value)">Set</button>
+            <button id="resetFramerateButton" onClick="setFramerate(24)">Reset</button>
+        </div>
+    </div>
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
@@ -38,37 +38,37 @@
 		</script>
 		
 		-->
-        <script src="js/plugins.js"></script>
-        <script src="js/loop.js"></script>
-        
-		<script type = "text/javascript">
-            var looperOptions = { "numberOfImages" : 54,
-                                  "fileExtension" : "jpg",
-                                  "imagePrefix" : "image_",
-                                  "img" : "currentPicture",
-                                  "reversed" : false,
-                                  "autoStart" : true };
-            var looper = imageLooper(looperOptions);
-		</script>
-        
-		<script type = "text/javascript">
-            
-            function setReversed() {
-                var reversed = document.getElementById('reverseCheckBox').checked;
-                looper.setReversed(reversed);
+    <script src="js/plugins.js"></script>
+    <script src="js/loop.js"></script>
+    <script type="text/javascript">
+        var looperOptions = {
+            "numberOfImages": 54,
+            "fileExtension": "jpg",
+            "imagePrefix": "image_",
+            "img": "currentPicture",
+            "reversed": false,
+            "autoStart": true
+        };
+        var looper = imageLooper(looperOptions);
+    </script>
+    <script type="text/javascript">
+        function setFramerate(number) {
+            if (!(number === 'NaN')) {
+                document.getElementById('frameRateTextBox').value = number;
+                looper.setFramesPerSecond(number);
             }
-            
-            function toggleLoop(s) {
-                if (s === 'Start') {
-                    looper.startLoop();
-                    document.getElementById('toggleButton').innerHTML = 'Stop';
-                }
-                else if (s === 'Stop') {
-                    looper.stopLoop();
-                    document.getElementById('toggleButton').innerHTML = 'Start';
-                }
+        }
+
+        function toggleLoop(s) {
+            if (s === 'Start') {
+                looper.startLoop();
+                document.getElementById('toggleButton').innerHTML = 'Stop';
+            } else if (s === 'Stop') {
+                looper.stopLoop();
+                document.getElementById('toggleButton').innerHTML = 'Start';
             }
-        </script>
-        
-    </body>
+        }
+    </script>
+</body>
+
 </html>
