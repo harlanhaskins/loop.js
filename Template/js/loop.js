@@ -49,14 +49,17 @@ Copyright 2013, Not So Average, Inc.
 
 var imageLooper = function (options) {
 
+    var urlsProvided = false;
+
     function getMergedOptions(options) {
         var defaultOptions = {
-            "numberOfImages": 54,
+            "numberOfImages": 100,
             "framesPerSecond": 24,
             "folder": "loopImages",
             "fileExtension": "png",
             "imagePrefix": "image_",
             "img": "currentPicture",
+            "urls": null,
             "reversed": false,
             "autoStart": true
         };
@@ -72,6 +75,7 @@ var imageLooper = function (options) {
                     defaultOptions[key] = options[key];
                 }
             }
+            urlsProvided = (defaultOptions.urls !== null);
         }
         return defaultOptions;
     }
@@ -90,17 +94,26 @@ var imageLooper = function (options) {
         return (loadedImages >= options.numberOfImages);
     }
 
-    function setImageAttributes(image, numberString) {
-        var fileNameString = options.folder + "/" + options.imagePrefix + numberString + '.' + options.fileExtension;
+    function numberStringArray() {
+        var urls = [];
+        var i = 0;
+        while (i < options.numberOfImages) {
+            urls.push(fileNameString(numberString(i)));
+            i++;
+        }
+        return urls;
+    }
+
+    function setImageAttributes(image, fileNameString) {
         image.src = fileNameString;
         image.setAttribute("src", fileNameString);
         image.addEventListener("error", stopLoop, false);
         image.addEventListener("load", addToLoadedImages, false);
     }
 
-    function makeAndAddImageToArray(numberString) {
+    function makeAndAddImageToArray(fileNameString) {
         var image = new Image();
-        setImageAttributes(image, numberString);
+        setImageAttributes(image, fileNameString);
         imageArray.push(image);
         return image;
     }
@@ -109,10 +122,23 @@ var imageLooper = function (options) {
         return ("00" + i).slice(-3);
     }
 
+    function fileNameString(numberString) {
+        var fileName;
+        if (urlsProvided) {
+            fileName = numberString;
+        } else {
+            fileName = options.folder + "/" + options.imagePrefix + numberString + '.' + options.fileExtension;
+        }
+        return fileName;
+    }
+
     function addImageTagsToDiv() {
+        if (!options.urls) {
+            options.urls = numberStringArray();
+        }
         var i = 0;
         while (i < options.numberOfImages) {
-            makeAndAddImageToArray(numberString(i));
+            makeAndAddImageToArray(options.urls[i]);
             i++;
         }
     }
@@ -148,6 +174,8 @@ var imageLooper = function (options) {
         adjustIterator();
     }
 
+
+    /* Frame Rate adjustments thanks to Rishabh at http://codetheory.in/controlling-the-frame-rate-with-requestanimationframe/ */
     var now;
     var then = Date.now();
     var interval = 1000 / options.framesPerSecond;
@@ -178,11 +206,11 @@ var imageLooper = function (options) {
         window.cancelAnimationFrame(request);
     }
 
+    addImageTagsToDiv();
+
     if (options.autoStart) {
         startLoop();
     }
-
-    addImageTagsToDiv();
 
     return {
         startLoop: function () {
