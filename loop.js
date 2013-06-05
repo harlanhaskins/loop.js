@@ -201,6 +201,10 @@ var imageLooper = function (options) {
     function setReversed(reversed) {
         options.reversed = reversed;
     }
+    
+    function setFramesPerSecond(framesPerSecond) {
+        options.framesPerSecond = framesPerSecond;
+    }
 
     function stopLoop() {
         window.cancelAnimationFrame(request);
@@ -221,6 +225,9 @@ var imageLooper = function (options) {
         },
         setReversed: function (reversed) {
             return setReversed(reversed);
+        },
+        setFramesPerSecond: function (framesPerSecond) {
+            return setFramesPerSecond(framesPerSecond);
         }
     };
 
