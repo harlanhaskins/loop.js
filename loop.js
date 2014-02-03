@@ -4,8 +4,6 @@ Copyright 2013 Harlan Haskins
 You must have a folder filled with your images, named sequentially with a 3 digit number, starting with 000.
 */
 
-/*jshint browser:true */
-
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 
