@@ -14,6 +14,7 @@ All one needs to do is have:
 
 Then instantiate an `imageLooper()` object with a JSON object filled with their options. The default options are these:
 
+```javascript
         "numberOfImages" : 100,
         "framesPerSecond" : 24,
         "folder" : "loopImages",
@@ -23,7 +24,8 @@ Then instantiate an `imageLooper()` object with a JSON object filled with their 
         "urls" : null,
         "reversed" : false,
         "autoStart" : true
-        
+```
+
 You can change as many or as few of the options as you'd like. If you use the default options, then loop.js requires only one line:
         
         var looper = imageLooper();
@@ -34,6 +36,7 @@ If I have a sequence with 217 images, each named `dog-###.jpg`, in the folder `p
 
 I would write this:
 
+```html
 	<script src="js/imageLooper.js"></script>
 	<script type = "text/javascript">
 		var looperOptions = { "numberOfImages" : 217,
@@ -42,5 +45,6 @@ I would write this:
                                   "img" : "snails" };
                 var looper = imageLooper(looperOptions);
 		//if you don't want to use buttons to start the loop, and you've disabled autoStart, make sure you call looper.startLoop() somewhere.	</script>
+```
 
 If you want to start the loop, call `looper.startLoop()`, if you want to stop, call `looper.stopLoop()`. You can also call `looper.setReversed(reversed)` to set if the image reverses at the end, and `looper.setFramesPerSecond` to set the framerate.
