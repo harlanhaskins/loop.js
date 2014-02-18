@@ -39,11 +39,11 @@ I would write this:
 ```html
 	<script src="js/imageLooper.js"></script>
 	<script type = "text/javascript">
-		var looperOptions = { "numberOfImages" : 217,
-                                  "fileExtension" : "jpg",
-                                  "imagePrefix" : "dog-",
-                                  "img" : "snails" };
-                var looper = imageLooper(looperOptions);
+		var looperOptions = { 		"numberOfImages" : 217,
+                                  	"fileExtension" : "jpg",
+                                	"imagePrefix" : "dog-",
+                                	"img" : "snails" };
+        var looper = imageLooper(looperOptions);
 		//if you don't want to use buttons to start the loop, and you've disabled autoStart, make sure you call looper.startLoop() somewhere.	</script>
 ```
 
