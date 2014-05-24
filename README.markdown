@@ -37,14 +37,16 @@ If I have a sequence with 217 images, each named `dog-###.jpg`, in the folder `p
 I would write this:
 
 ```html
-	<script src="js/imageLooper.js"></script>
-	<script type = "text/javascript">
-		var looperOptions = { 		"numberOfImages" : 217,
-                                  	"fileExtension" : "jpg",
-                                	"imagePrefix" : "dog-",
-                                	"img" : "snails" };
+    <script src="js/imageLooper.js"></script>
+    <script type = "text/javascript">
+        var looperOptions = { "numberOfImages" : 217,
+                              "fileExtension" : "jpg",
+                              "imagePrefix" : "dog-",
+                              "img" : "snails" };
         var looper = imageLooper(looperOptions);
-		//if you don't want to use buttons to start the loop, and you've disabled autoStart, make sure you call looper.startLoop() somewhere.	</script>
+	    // if you don't want to use buttons to start the loop, and you've disabled autoStart, 
+	    // make sure you call looper.startLoop() somewhere.
+    </script>
 ```
 
-If you want to start the loop, call `looper.startLoop()`, if you want to stop, call `looper.stopLoop()`. You can also call `looper.setReversed(reversed)` to set if the image reverses at the end, and `looper.setFramesPerSecond` to set the framerate.
+If you want to start the loop, call `looper.startLoop()`, if you want to stop, call `looper.stopLoop()`. You can also call `looper.setReversed(reversed)` to set if the image reverses at the end, and `looper.setFramesPerSecond()` to set the framerate.
