@@ -38,7 +38,7 @@ I would write this:
 
 ```html
     <script src="js/imageLooper.js"></script>
-    <script type = "text/javascript">
+    <script type="text/javascript">
         var looperOptions = { "numberOfImages" : 217,
                               "fileExtension" : "jpg",
                               "imagePrefix" : "dog-",
