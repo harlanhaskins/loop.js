@@ -90,7 +90,7 @@ var imageLooper = function (options) {
     function setImageAttributes(image, fileNameString) {
         image.src = fileNameString;
         image.setAttribute("src", fileNameString);
-        image.addEventListener("error", stopLoop, false);
+        image.addEventListener("error", stop, false);
         image.addEventListener("load", addToLoadedImages, false);
     }
 
@@ -177,42 +177,29 @@ var imageLooper = function (options) {
         }
     }
 
-    function startLoop() {
-        loop();
-    }
-
     function setReversed(reversed) {
         options.reversed = reversed;
     }
-    
+
     function setFramesPerSecond(framesPerSecond) {
         options.framesPerSecond = framesPerSecond;
         interval = 1000 / options.framesPerSecond;
     }
 
-    function stopLoop() {
+    function stop() {
         window.cancelAnimationFrame(request);
     }
 
     addImageTagsToDiv();
 
     if (options.autoStart) {
-        startLoop();
+        loop();
     }
 
     return {
-        startLoop: function () {
-            return startLoop();
-        },
-        stopLoop: function () {
-            return stopLoop();
-        },
-        setReversed: function (reversed) {
-            return setReversed(reversed);
-        },
-        setFramesPerSecond: function (framesPerSecond) {
-            return setFramesPerSecond(framesPerSecond);
-        }
+        start: loop,
+        stop: stop,
+        setReversed: setReversed,
+        setFramesPerSecond: setFramesPerSecond
     };
-
 };

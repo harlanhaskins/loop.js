@@ -5,70 +5,74 @@
     <title>loop.js</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <!--[if lt IE 7]>
-        <p class="chromeframe">You are using an outdated browser.
-            <a href="http://browsehappy.com/">Upgrade your browser today</a>or
-            <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a>to better experience this site.</p>
-    <![endif]-->
-    <!-- Add your site or application content here -->
-    <div align="center">
-        <div style="padding:20px;">
-            <img id='currentPicture'>
+    <div class='container'>
+        <div class="row">
+            <img id='currentPicture' alt='Loop Image'>
         </div>
-        <div id="buttons">
-            <input type="checkbox" id="reverseCheckBox" onClick="looper.setReversed(this.checked)">Reversed
-            <button id="toggleButton" onClick="toggleLoop(this.innerHTML)">Stop</button>
-            <br />
-            <br />Frame Rate:
-            <input type='text' id='frameRateTextBox' style="width:30px;">
-            <button id="setFramerateButton" onClick="setFramerate(window.eval(document.getElementById('frameRateTextBox')).value)">Set</button>
-            <button id="resetFramerateButton" onClick="setFramerate(24)">Reset</button>
+        <br />
+        <div class="row">
+            <div class='col-lg-3'></div>
+            <div class="col-lg-3">
+                <span class='checkbox-container'>
+                    <label for='reverseCheckBox'>
+                        <input type="checkbox" id="reverseCheckBox" onClick="looper.setReversed(this.checked)">&nbsp;Reversed
+                    </label>
+                </span>
+                <button class='btn btn-danger' id="toggleButton" onClick="toggle(this.innerHTML)">Stop</button>
+            </div>
+            <div class="col-lg-3">
+                <div class='input-group'>
+                    <input class="form-control" placeholder='Framerate' type='text' id='frameRateTextBox'>
+                    <span class="input-group-btn">
+                        <button class='btn btn-success' id="setFramerateButton" onClick="setFramerate($('#frameRateTextBox').val())">Set</button>
+                        <button class='btn btn-warning' id="resetFramerateButton" onClick="setFramerate(24)">Reset</button>
+                    </span>
+                </div>
+            </div>
+            <div class='col-lg-3'></div>
         </div>
     </div>
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
-		</script>
-		
-		-->
-    <script src="js/plugins.js"></script>
-    <script src="js/loop.js"></script>
+    <script src="../loop.js"></script>
     <script type="text/javascript">
-        var looperOptions = {
-            "numberOfImages": 54,
-            "fileExtension": "jpg",
-            "imagePrefix": "image_",
-            "img": "currentPicture",
-            "reversed": false,
-            "autoStart": true
-        };
-        var looper = imageLooper(looperOptions);
+        var looper = imageLooper({
+          "numberOfImages": 54,
+          "fileExtension": "jpg",
+          "imagePrefix": "image_",
+          "img": "currentPicture",
+          "reversed": false,
+          "autoStart": true
+        });
     </script>
     <script type="text/javascript">
         function setFramerate(number) {
-            if (!(number === 'NaN')) {
-                document.getElementById('frameRateTextBox').value = number;
-                looper.setFramesPerSecond(number);
-            }
+          if (!isNaN(number)) {
+            document.getElementById('frameRateTextBox').value = number;
+            looper.setFramesPerSecond(number);
+          }
         }
 
-        function toggleLoop(s) {
-            if (s === 'Start') {
-                looper.startLoop();
-                document.getElementById('toggleButton').innerHTML = 'Stop';
-            } else if (s === 'Stop') {
-                looper.stopLoop();
-                document.getElementById('toggleButton').innerHTML = 'Start';
-            }
+        function toggle(s) {
+          var btn_class;
+          var text;
+          if (s == 'Start') {
+            looper.start();
+            text = 'Stop';
+            btn_class = 'btn btn-danger';
+          } else if (s == 'Stop') {
+            looper.stop();
+            text = 'Start';
+            btn_class = 'btn btn-success';
+          }
+          var btn = $('#toggleButton');
+          btn.html(text);
+          btn.attr('class', btn_class);
         }
     </script>
 </body>
-
 </html>
