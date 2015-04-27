@@ -1,6 +1,4 @@
 /*
-Copyright 2013 Harlan Haskins
-
 You must have a folder filled with your images, named sequentially with a 3 digit number, starting with 000.
 */
 
