@@ -1,12 +1,11 @@
-loop.js
-=====
+# loop.js
 
 *A template project, using [HTML5 Boilerplate](http://html5boilerplate.com/), has been included with the default values.*
 
 This is loop.js. With it, you can use Javascript to loop through a sequence of images (up to 1000 total) just like a gif, without the color compression.
 
-Installation
-===
+## Installation
+
 All one needs to do is have:
 
 1. A folder with images to loop in the form [imagePrefix]###.[fileExtension] or an array of URLs pointing to images.
@@ -27,11 +26,11 @@ Then instantiate an `imageLooper()` object with a JSON object filled with their 
 ```
 
 You can change as many or as few of the options as you'd like. If you use the default options, then loop.js requires only one line:
-        
+
         var looper = imageLooper();
 
-Example
-===
+## Example
+
 If I have a sequence with 217 images, each named `dog-###.jpg`, in the folder `pancakes/`, and I want the images looped in an img with the id `snails`.
 
 I would write this:
@@ -39,14 +38,19 @@ I would write this:
 ```html
     <script src="js/imageLooper.js"></script>
     <script type="text/javascript">
-        var looperOptions = { "numberOfImages" : 217,
-                              "fileExtension" : "jpg",
-                              "imagePrefix" : "dog-",
-                              "img" : "snails" };
-        var looper = imageLooper(looperOptions);
-	    // if you don't want to use buttons to start the loop, and you've disabled autoStart, 
-	    // make sure you call looper.startLoop() somewhere.
+        var looper = imageLooper({
+            "numberOfImages" : 217,
+            "fileExtension" : "jpg",
+            "imagePrefix" : "dog-",
+            "img" : "snails"
+        });
+	    // if you don't want to use buttons to start the loop,
+        // and you've disabled autoStart,
+	    // make sure you call looper.start() somewhere.
     </script>
 ```
 
-If you want to start the loop, call `looper.startLoop()`, if you want to stop, call `looper.stopLoop()`. You can also call `looper.setReversed(reversed)` to set if the image reverses at the end, and `looper.setFramesPerSecond()` to set the framerate.
+If you want to start the loop, call `looper.start()`, if you want to stop, call `looper.stop()`.
+You can also call `looper.setReversed(reversed)` to set if the image
+reverses at the end, and `looper.setFramesPerSecond()` to set the
+framerate.
