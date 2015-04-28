@@ -28,106 +28,67 @@ You must have a folder filled with your images, named sequentially with a 3 digi
     }
 }());
 
-var imageLooper = function (options) {
+var ImageLooper = function(_options) {
 
-    var urlsProvided = false;
-
-    function getMergedOptions(options) {
-        var defaultOptions = {
-            "numberOfImages": 100,
-            "framesPerSecond": 24,
+    function merged_options(options) {
+        var default_options = {
+            "image_count": 100,
+            "framerate": 24,
             "folder": "loopImages",
-            "fileExtension": "png",
-            "imagePrefix": "image_",
+            "extension": "png",
+            "prefix": "image_",
             "img": "currentPicture",
             "urls": null,
             "reversed": false,
-            "autoStart": true
+            "auto_start": true
         };
-        if (options) {
-            var key;
-            for (key in options) {
-                if (!options.hasOwnProperty(key)) {
-                    continue;
-                }
-                if (key === 'img') {
-                    defaultOptions[key] = document.getElementById(defaultOptions[key]);
-                } else {
-                    defaultOptions[key] = options[key];
-                }
+        if (!options) return default_options;
+        for (var key in options) {
+            if (!options.hasOwnProperty(key)) continue;
+            if (key == 'img') {
+                default_options[key] = document.getElementById(default_options[key]);
+            } else {
+                default_options[key] = options[key];
             }
-            urlsProvided = (defaultOptions.urls !== null);
         }
-        return defaultOptions;
+        return default_options;
     }
 
-    var imageArray = [];
+    var options = merged_options(_options);
 
-    options = getMergedOptions(options);
-
-    var loadedImages = 0;
-
-    function addToLoadedImages() {
-        loadedImages += 1;
+    function number_strings(count) {
+        return Array.apply(null, Array(count)).map(function(_, i) {
+            return file_name(i);
+        });
     }
 
-    function allImagesLoaded() {
-        return (loadedImages >= options.numberOfImages);
-    }
+    var loaded_images = 0;
 
-    function numberStringArray() {
-        var urls = [];
-        var i = 0;
-        while (i < options.numberOfImages) {
-            urls.push(fileNameString(numberString(i)));
-            i++;
-        }
-        return urls;
-    }
-
-    function setImageAttributes(image, fileNameString) {
-        image.src = fileNameString;
-        image.setAttribute("src", fileNameString);
-        image.addEventListener("error", stop, false);
-        image.addEventListener("load", addToLoadedImages, false);
-    }
-
-    function makeAndAddImageToArray(fileNameString) {
+    function image_for_file_name(file_name) {
         var image = new Image();
-        setImageAttributes(image, fileNameString);
-        imageArray.push(image);
+        image.setAttribute("src", file_name);
+        image.addEventListener("error", stop, false);
+        image.addEventListener("load", function() { loaded_images++; }, false);
         return image;
     }
 
-    function numberString(i) {
-        return ("00" + i).slice(-3);
+    function file_name(number) {
+        return options.folder + "/" + options.prefix + ("00" + number).slice(-3) + '.' + options.extension;
     }
 
-    function fileNameString(numberString) {
-        var fileName;
-        if (urlsProvided) {
-            fileName = numberString;
-        } else {
-            fileName = options.folder + "/" + options.imagePrefix + numberString + '.' + options.fileExtension;
-        }
-        return fileName;
-    }
-
-    function addImageTagsToDiv() {
+    function add_tags() {
         if (!options.urls) {
-            options.urls = numberStringArray();
+            options.urls = number_strings(options.image_count);
         }
-        var i = 0;
-        while (i < options.numberOfImages) {
-            makeAndAddImageToArray(options.urls[i]);
-            i++;
-        }
+        images = options.urls.map(function(url, _) {
+            return image_for_file_name(url)
+        });
     }
 
     var iterator = 0;
     var reversing = false;
 
-    function adjustIterator() {
+    function iterate() {
         if (reversing) {
             if (iterator <= 0) {
                 reversing = false;
@@ -136,7 +97,7 @@ var imageLooper = function (options) {
             }
         } else {
             iterator += 1;
-            if (iterator >= options.numberOfImages) {
+            if (iterator >= options.image_count) {
                 if (options.reversed) {
                     reversing = true;
                 } else {
@@ -146,58 +107,58 @@ var imageLooper = function (options) {
         }
     }
 
-    function setPositionInLoop() {
-        var image = imageArray[iterator];
+    function process_image() {
+        var image = images[iterator];
         if (image) {
             options.img.src = image.src;
         }
-
-        adjustIterator();
     }
 
 
     /* Frame Rate adjustments thanks to Rishabh at http://codetheory.in/controlling-the-frame-rate-with-requestanimationframe/ */
-    var now;
     var then = Date.now();
-    var interval = 1000 / options.framesPerSecond;
-    var delta;
     var request;
+
+    function timeout_interval() {
+        return 1000 / options.framerate;
+    }
 
     function loop() {
         request = window.requestAnimationFrame(loop);
-        if (allImagesLoaded()) {
-            now = Date.now();
-            delta = now - then;
-            if (delta > interval) {
-                then = now - (delta % interval);
-                setPositionInLoop();
-            }
+        if (loaded_images < options.image_count) return;
+        var now = Date.now();
+        var delta = now - then;
+        var interval = timeout_interval();
+        if (delta > interval) {
+            then = now - (delta % interval);
+            process_image();
+            iterate();
         }
     }
 
-    function setReversed(reversed) {
+    function set_reversed(reversed) {
         options.reversed = reversed;
     }
 
-    function setFramesPerSecond(framesPerSecond) {
-        options.framesPerSecond = framesPerSecond;
-        interval = 1000 / options.framesPerSecond;
+    function set_framerate(framerate) {
+        options.framerate = Math.abs(framerate);
+        interval = 1000 / options.framerate;
     }
 
     function stop() {
         window.cancelAnimationFrame(request);
     }
 
-    addImageTagsToDiv();
+    add_tags();
 
-    if (options.autoStart) {
+    if (options.auto_start) {
         loop();
     }
 
     return {
         start: loop,
         stop: stop,
-        setReversed: setReversed,
-        setFramesPerSecond: setFramesPerSecond
+        set_reversed: set_reversed,
+        set_framerate: set_framerate
     };
 };

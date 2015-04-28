@@ -7,21 +7,28 @@
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/flatly.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
     <div class='container'>
         <div class="row">
-            <img id='currentPicture' alt='Loop Image'>
+            <div class='title-container'>
+                <h1>loop.js</h1>
+                <h4>A simple javascript image looper.</h4>
+            </div>
         </div>
         <br />
+        <div class="row">
+            <img id='currentPicture' alt='Loop Image'>
+        </div>
         <div class="row">
             <div class='col-lg-3'></div>
             <div class="col-lg-3">
                 <span class='checkbox-container'>
                     <label for='reverseCheckBox'>
-                        <input type="checkbox" id="reverseCheckBox" onClick="looper.setReversed(this.checked)">&nbsp;Reversed
+                        <input type="checkbox" id="reverseCheckBox" onClick="looper.set_reversed(this.checked)">&nbsp;Reversed
                     </label>
                 </span>
                 <button class='btn btn-danger' id="toggleButton" onClick="toggle(this.innerHTML)">Stop</button>
@@ -30,8 +37,8 @@
                 <div class='input-group'>
                     <input class="form-control" placeholder='Framerate' type='text' id='frameRateTextBox'>
                     <span class="input-group-btn">
-                        <button class='btn btn-success' id="setFramerateButton" onClick="setFramerate($('#frameRateTextBox').val())">Set</button>
-                        <button class='btn btn-warning' id="resetFramerateButton" onClick="setFramerate(24)">Reset</button>
+                        <button class='btn btn-success' id="setFramerateButton" onClick="set_framerate($('#frameRateTextBox').val())">Set</button>
+                        <button class='btn btn-warning' id="resetFramerateButton" onClick="set_framerate(24)">Reset</button>
                     </span>
                 </div>
             </div>
@@ -40,20 +47,20 @@
     </div>
     <script src="../loop.js"></script>
     <script type="text/javascript">
-        var looper = imageLooper({
-          "numberOfImages": 54,
-          "fileExtension": "jpg",
-          "imagePrefix": "image_",
+        var looper = ImageLooper({
+          "image_count": 54,
+          "extension": "jpg",
+          "prefix": "image_",
           "img": "currentPicture",
           "reversed": false,
-          "autoStart": true
+          "auto_start": true
         });
     </script>
     <script type="text/javascript">
-        function setFramerate(number) {
+        function set_framerate(number) {
           if (!isNaN(number)) {
             document.getElementById('frameRateTextBox').value = number;
-            looper.setFramesPerSecond(number);
+            looper.set_framerate(number);
           }
         }
 

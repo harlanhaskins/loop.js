@@ -14,20 +14,20 @@ All one needs to do is have:
 Then instantiate an `imageLooper()` object with a JSON object filled with their options. The default options are these:
 
 ```javascript
-        "numberOfImages" : 100,
-        "framesPerSecond" : 24,
+        "image_count" : 100,
+        "framerate" : 24,
         "folder" : "loopImages",
-        "fileExtension" : "png",
-        "imagePrefix" : "image_",
+        "extension" : "png",
+        "prefix" : "image_",
         "img" : "currentPicture",
         "urls" : null,
         "reversed" : false,
-        "autoStart" : true
+        "auto_start" : true
 ```
 
 You can change as many or as few of the options as you'd like. If you use the default options, then loop.js requires only one line:
 
-        var looper = imageLooper();
+        var looper = ImageLooper();
 
 ## Example
 
@@ -36,12 +36,12 @@ If I have a sequence with 217 images, each named `dog-###.jpg`, in the folder `p
 I would write this:
 
 ```html
-    <script src="js/imageLooper.js"></script>
+    <script src="js/loop.js"></script>
     <script type="text/javascript">
         var looper = imageLooper({
-            "numberOfImages" : 217,
-            "fileExtension" : "jpg",
-            "imagePrefix" : "dog-",
+            "image_count" : 217,
+            "extension" : "jpg",
+            "prefix" : "dog-",
             "img" : "snails"
         });
 	    // if you don't want to use buttons to start the loop,
@@ -51,6 +51,6 @@ I would write this:
 ```
 
 If you want to start the loop, call `looper.start()`, if you want to stop, call `looper.stop()`.
-You can also call `looper.setReversed(reversed)` to set if the image
-reverses at the end, and `looper.setFramesPerSecond()` to set the
+You can also call `looper.set_reversed(reversed)` to set if the image
+reverses at the end, and `looper.set_framerate(framerate)` to set the
 framerate.
