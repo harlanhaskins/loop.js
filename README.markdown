@@ -22,8 +22,11 @@ Then instantiate an `imageLooper()` object with a JSON object filled with their 
         "img" : "currentPicture",
         "urls" : null,
         "reversed" : false,
-        "auto_start" : true
+        "auto_start" : true,
+        "onframe": null
 ```
+
+`onframe` is a function to be called per frame change, of type `(current: int, total: int) -> void`
 
 You can change as many or as few of the options as you'd like. If you use the default options, then loop.js requires only one line:
 

@@ -40,7 +40,8 @@ var ImageLooper = function(_options) {
             "img": "currentPicture",
             "urls": null,
             "reversed": false,
-            "auto_start": true
+            "auto_start": true,
+            "onframe": null
         };
         if (!options) return default_options;
         for (var key in options) {
@@ -132,6 +133,9 @@ var ImageLooper = function(_options) {
         if (delta > interval) {
             then = now - (delta % interval);
             process_image();
+            if (options.onframe) {
+                options.onframe(iterator + 1, options.image_count);
+            }
             iterate();
         }
     }
@@ -143,6 +147,10 @@ var ImageLooper = function(_options) {
     function set_framerate(framerate) {
         options.framerate = Math.abs(framerate);
         interval = 1000 / options.framerate;
+    }
+
+    function set_onframe(onframe) {
+        options.onframe = onframe;
     }
 
     function stop() {
@@ -159,6 +167,7 @@ var ImageLooper = function(_options) {
         start: loop,
         stop: stop,
         set_reversed: set_reversed,
-        set_framerate: set_framerate
+        set_framerate: set_framerate,
+        set_onframe: set_onframe
     };
 };
