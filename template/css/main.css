@@ -1,7 +1,6 @@
 #currentPicture {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .title-container {
@@ -23,7 +22,7 @@ body {
 
 .footer-text {
     margin-top: 2rem;
-    margin-left: 27.5%;
+    text-align: center;
 }
 
 span.checkbox-container {
